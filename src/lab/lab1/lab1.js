@@ -34,8 +34,8 @@ const generateTodoTable = () => {
             todoList.forEach((Todo, index) => {
                 tbody.innerHTML += `<tr>
                 <td>${Todo.id}</td>
-                <td>M${Todo.name}</td>
-                <td><button>erase</button></td>
+                <td>${Todo.name}</td>
+                <td><button data-id=${Todo.id} class="btnDelete">erase</button></td>
             </tr>`
 
             })
@@ -44,3 +44,24 @@ const generateTodoTable = () => {
 }
 
 generateTodoTable();
+
+const deleteBtns = document.querySelectorAll(".btnDelete");
+if (deleteBtns) {
+    deleteBtns.forEach((btn, index) => {
+        console.log(btn, index);
+        btn.addEventListener("click", (e) => {
+            const id = btn.getAttribute("data-id");
+            handleDeleteTodo(id)
+        })
+    })
+}
+
+const handleDeleteTodo = (id) => {
+    const todoListStr = localStorage.getItem("Todo");
+    if (todoListStr) {
+        const todoList = JSON.parse(todoListStr);
+        const newTodoList = todoList.filter((Todo, index) => Todo.id + "" !== id);
+        localStorage.setItem("Todo", JSON.stringify(newTodoList));
+        window.location.reload();
+    }
+}
