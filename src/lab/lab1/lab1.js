@@ -1,0 +1,46 @@
+console.log("lab1");
+
+const saveBtn = document.getElementById("Save");
+const input = document.getElementById("name");
+function getRandomId(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+if (saveBtn) {
+    saveBtn.addEventListener("click", () => {
+        const myTodo = {
+            id: getRandomId(1, 1000000),
+            name: input.value
+        }
+        const currentTodoStr = localStorage.getItem("Todo");
+        if (currentTodoStr) {
+            const currentTodo = JSON.parse(currentTodoStr);
+            currentTodo.push(myTodo)
+            localStorage.setItem("Todo", JSON.stringify(currentTodo));
+        } else {
+            localStorage.setItem("Todo", JSON.stringify([myTodo]));
+        }
+        window.location.href = "lab1.html";
+    });
+};
+
+const generateTodoTable = () => {
+    const todoListStr = localStorage.getItem("Todo");
+    if (todoListStr) {
+        const todoList = JSON.parse(todoListStr);
+        const tbody = document.querySelector("#todoList tbody");
+        if (todoList && todoList.length) {
+            todoList.forEach((Todo, index) => {
+                tbody.innerHTML += `<tr>
+                <td>${Todo.id}</td>
+                <td>M${Todo.name}</td>
+                <td><button>erase</button></td>
+            </tr>`
+
+            })
+        };
+    }
+}
+
+generateTodoTable();
